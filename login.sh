@@ -1,23 +1,17 @@
 #!/system/bin/sh
 
-sleep 5
+sleep 6
 
-# Ambil ID device (lebih stabil di VSP)
+# Ambil ID device
 device_id=$(getprop ro.boot.serialno)
-
 if [ -z "$device_id" ]; then
 device_id=$(settings get secure android_id)
 fi
 
 echo "Device: $device_id"
 
-# Ambil angka dari ID
 num=$(echo $device_id | tr -cd '0-9')
-
-# Ambil 2 digit terakhir
 index=$(echo $num | tail -c 2)
-
-# Bikin index 0-19
 index=$((index % 20))
 
 emails=(
@@ -47,13 +41,21 @@ email=${emails[$index]}
 
 echo "Email dipakai: $email"
 
-# Klik kolom Gmail
-input tap 360 420
+# Klik kolom email
+input tap 360 430
 sleep 1
 
 # Isi email
 input text $email
 sleep 1
 
-# Klik Next
-input tap 360 650
+# Tutup keyboard
+input keyevent 66
+sleep 1
+
+# Klik Next (beberapa kali biar pasti)
+input tap 620 820
+sleep 1
+input tap 620 820
+sleep 1
+input tap 620 820
