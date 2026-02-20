@@ -2,24 +2,25 @@
 
 sleep 2
 
-BATCH=1
-TOTAL=20
+FILE=/sdcard/email_index.txt
 
-device=$(getprop ro.serialno)
+if [ ! -f $FILE ]; then
+  echo 1 > $FILE
+fi
 
-num=$(echo $device | tr -cd '0-9')
-slot=$((num % TOTAL))
+index=$(cat $FILE)
+next=$((index + 1))
+echo $next > $FILE
 
-start=$(( (BATCH - 1) * TOTAL + 1 ))
-email_number=$(( start + slot ))
+email="delhi${index}@asetsaya.com"
 
-echo "Device: $device"
-echo "Slot: $slot"
-echo "Email: delhi$email_number@asetsaya.com"
+echo "Email dipakai: $email"
 
-input text "delhi$email_number"
-input text "@asetsaya"
-input text ".com"
+user=$(echo $email | cut -d@ -f1)
+domain=$(echo $email | cut -d@ -f2)
+
+input text "$user"
+input text "@$domain"
 
 sleep 1
 input keyevent 66
