@@ -2,27 +2,33 @@
 
 sleep 3
 
+BATCH=1
+TOTAL=20
+
 PREFIX="delhi"
 DOMAIN="@asetsaya.com"
 
 # ambil android id
-ID=$(settings get secure android_id)
+device=$(settings get secure android_id)
 
-# waktu realtime
-TIME=$(date +%s%N)
+# ambil angka dari id
+num=$(echo "$device" | tr -cd '0-9')
 
-# random
-RAND=$RANDOM
+# kalau kosong pakai random
+if [ -z "$num" ]; then
+    num=$RANDOM
+fi
 
-# gabungkan
-MIX="${ID}${TIME}${RAND}"
+# tentukan slot device (0-19)
+slot=$((num % TOTAL))
 
-# ambil angka saja lalu potong 7 digit terakhir
-NUM=$(echo "$MIX" | tr -cd '0-9' | tail -c 7)
+# hitung nomor email sesuai batch
+email_number=$(( (BATCH - 1) * TOTAL + slot + 1 ))
 
-EMAIL="${PREFIX}${NUM}${DOMAIN}"
+EMAIL="${PREFIX}${email_number}${DOMAIN}"
 
-echo "Generated: $EMAIL"
+echo "Slot: $slot"
+echo "Email: $EMAIL"
 
 input text "$EMAIL"
 sleep 1
