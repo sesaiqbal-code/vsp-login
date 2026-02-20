@@ -1,26 +1,29 @@
 #!/system/bin/sh
 
-sleep 2
+sleep 3
 
-FILE=/sdcard/email_index.txt
+PREFIX="delhi"
+DOMAIN="@asetsaya.com"
 
-if [ ! -f $FILE ]; then
-  echo 1 > $FILE
-fi
+# ambil android id
+ID=$(settings get secure android_id)
 
-index=$(cat $FILE)
-next=$((index + 1))
-echo $next > $FILE
+# waktu realtime
+TIME=$(date +%s%N)
 
-email="delhi${index}@asetsaya.com"
+# random
+RAND=$RANDOM
 
-echo "Email dipakai: $email"
+# gabungkan
+MIX="${ID}${TIME}${RAND}"
 
-user=$(echo $email | cut -d@ -f1)
-domain=$(echo $email | cut -d@ -f2)
+# ambil angka saja lalu potong 7 digit terakhir
+NUM=$(echo "$MIX" | tr -cd '0-9' | tail -c 7)
 
-input text "$user"
-input text "@$domain"
+EMAIL="${PREFIX}${NUM}${DOMAIN}"
 
+echo "Generated: $EMAIL"
+
+input text "$EMAIL"
 sleep 1
 input keyevent 66
