@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-sleep 6
+sleep 7
 
 # Ambil ID device
 device_id=$(getprop ro.boot.serialno)
@@ -41,21 +41,23 @@ email=${emails[$index]}
 
 echo "Email dipakai: $email"
 
-# Klik kolom email
-input tap 360 430
+# Fokus ke kolom Gmail (beberapa posisi supaya pasti kena)
+input tap 360 420
+sleep 1
+input tap 360 460
+sleep 1
+input tap 360 500
 sleep 1
 
 # Isi email
 input text $email
-sleep 1
+sleep 2
 
-# Tutup keyboard
+# Tekan Next dari keyboard
 input keyevent 66
-sleep 1
+sleep 2
 
-# Klik Next (beberapa kali biar pasti)
-input tap 620 820
+# Klik tombol Next juga (backup)
+input tap 600 820
 sleep 1
-input tap 620 820
-sleep 1
-input tap 620 820
+input tap 600 820
