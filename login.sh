@@ -1,35 +1,51 @@
 #!/system/bin/sh
 
-ID=$(settings get secure android_id)
+# Tunggu halaman login siap
+sleep 5
 
-EMAIL_LIST="
-gmail1@gmail.com
-gmail2@gmail.com
-gmail3@gmail.com
-gmail4@gmail.com
-gmail5@gmail.com
-gmail6@gmail.com
-gmail7@gmail.com
-gmail8@gmail.com
-gmail9@gmail.com
-gmail10@gmail.com
-gmail11@gmail.com
-gmail12@gmail.com
-gmail13@gmail.com
-gmail14@gmail.com
-gmail15@gmail.com
-gmail16@gmail.com
-gmail17@gmail.com
-gmail18@gmail.com
-gmail19@gmail.com
-gmail20@gmail.com
-"
+# Ambil ID device
+device_id=$(getprop ro.serialno)
 
-INDEX=$(echo $ID | tail -c 2)
-NUM=$((0x$INDEX % 20 + 1))
+# Ambil angka terakhir dari ID
+num=$(echo $device_id | tr -cd '0-9' | tail -c 2)
 
-EMAIL=$(echo "$EMAIL_LIST" | sed -n "${NUM}p")
+index=$((num % 20))
 
-input text $EMAIL
+emails=(
+gmail1%40gmail.com
+gmail2%40gmail.com
+gmail3%40gmail.com
+gmail4%40gmail.com
+gmail5%40gmail.com
+gmail6%40gmail.com
+gmail7%40gmail.com
+gmail8%40gmail.com
+gmail9%40gmail.com
+gmail10%40gmail.com
+gmail11%40gmail.com
+gmail12%40gmail.com
+gmail13%40gmail.com
+gmail14%40gmail.com
+gmail15%40gmail.com
+gmail16%40gmail.com
+gmail17%40gmail.com
+gmail18%40gmail.com
+gmail19%40gmail.com
+gmail20%40gmail.com
+)
+
+email=${emails[$index]}
+
+echo "Device: $device_id"
+echo "Email dipakai: $email"
+
+# Klik kolom Gmail (720x1280)
+input tap 360 420
 sleep 1
-input keyevent 66
+
+# Isi email
+input text $email
+sleep 1
+
+# Klik Next
+input tap 360 650
