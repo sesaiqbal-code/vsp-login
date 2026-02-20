@@ -11,15 +11,18 @@ DOMAIN="@asetsaya.com"
 # ambil android id
 ID=$(settings get secure android_id)
 
-# ambil angka dari id
+# ambil angka saja (hapus semua karakter lain termasuk -)
 NUM=$(echo "$ID" | tr -cd '0-9')
 
-# kalau tidak ada angka
+# kalau tidak ada angka sama sekali
 if [ -z "$NUM" ]; then
-NUM=$(date +%s)
+    NUM=$(date +%s)
 fi
 
-# hitung slot 0-19
+# ambil 6 digit terakhir biar stabil
+NUM=$(echo "$NUM" | tail -c 6)
+
+# hitung slot device
 SLOT=$((NUM % TOTAL))
 
 # hitung nomor email
@@ -27,8 +30,6 @@ EMAIL_NUMBER=$(( (BATCH - 1) * TOTAL + SLOT + 1 ))
 
 EMAIL="${PREFIX}${EMAIL_NUMBER}${DOMAIN}"
 
-echo "Device: $ID"
-echo "Slot: $SLOT"
 echo "Email: $EMAIL"
 
 input text "$EMAIL"
