@@ -2,7 +2,7 @@
 
 sleep 2
 
-BATCH=1   # ganti 1,2,3,4,5,6 sesuai batch
+BATCH=1
 
 device=$(settings get secure android_id)
 num=$(echo $device | tr -cd '0-9')
