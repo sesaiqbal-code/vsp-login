@@ -1,15 +1,24 @@
 #!/system/bin/sh
 
-# Tunggu halaman login siap
 sleep 5
 
-# Ambil ID device
-device_id=$(getprop ro.serialno)
+# Ambil ID device (lebih stabil di VSP)
+device_id=$(getprop ro.boot.serialno)
 
-# Ambil angka terakhir dari ID
-num=$(echo $device_id | tr -cd '0-9' | tail -c 2)
+if [ -z "$device_id" ]; then
+device_id=$(settings get secure android_id)
+fi
 
-index=$((num % 20))
+echo "Device: $device_id"
+
+# Ambil angka dari ID
+num=$(echo $device_id | tr -cd '0-9')
+
+# Ambil 2 digit terakhir
+index=$(echo $num | tail -c 2)
+
+# Bikin index 0-19
+index=$((index % 20))
 
 emails=(
 gmail1%40gmail.com
@@ -36,10 +45,9 @@ gmail20%40gmail.com
 
 email=${emails[$index]}
 
-echo "Device: $device_id"
 echo "Email dipakai: $email"
 
-# Klik kolom Gmail (720x1280)
+# Klik kolom Gmail
 input tap 360 420
 sleep 1
 
